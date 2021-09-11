@@ -1,0 +1,212 @@
+
+// Calcule le successeur de la node 2^(couche- 2) génération dans le futur, une couche inférieure
+// voir les détails de l'algorithme
+// la résultat est déjà caché, et sans doute hashé
+unsigned long CalculerSuccesseur( unsigned int couche, unsigned long ind , SDL_Renderer* render) {
+// si le successeur n'a jamais été calculé
+// il y a une redondance avec les appels récursifs de temporaire1-9
+    if ( cache[couche][ind].indice_futur == 18446744073709551615ul ) {
+// On utilise cette variable par précaution, si l'adresse du cache a été modifiée par l'appel à la fonction
+        unsigned long tempo;
+
+// en théorie, on n'a jamais à calculer le successeur d'une node de dimensions 2x2 ou 1x1
+        if ( couche <= 2 ) {
+// le cas de base de notre récursion est une cellule 4x4
+            if ( couche == 2) {
+        // si la node n'a pas encore eu son successeur calculé, on met le résultat dans le cache de celle-ci
+                tempo = CalculerSuccesseur4x4( cache[2][ind] );
+                cache[2][ind].indice_futur = tempo;
+            }
+            else {
+                printf("probleme\n");
+                return -1;
+            }
+        }
+        else {
+// ces nodes temporaires stockent les successeurs des 9 sous-nodes intermédiaires
+        unsigned long temporaire1 = cache[ couche ][ ind ].indice_no;
+        RenderNodes(render, temporaire1, couche - 1, 0, 0);
+        if ( cache[ couche - 1][ temporaire1].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire1 , render);
+            cache[ couche - 1 ][ temporaire1 ].indice_futur = tempo;
+        }
+        temporaire1 = cache[ couche - 1][ temporaire1 ].indice_futur;
+        RenderNodes(render, temporaire1, couche - 2, 20, 0);
+
+        unsigned long temporaire2 = Joindre( couche - 1,
+            cache[couche - 1][cache[ couche ][ ind ].indice_no ].indice_ne,
+            cache[couche - 1][cache[ couche ][ ind ].indice_ne ].indice_no,
+            cache[couche - 1][cache[ couche ][ ind ].indice_no ].indice_se,
+            cache[couche - 1][cache[ couche ][ ind ].indice_ne ].indice_so , render);
+        RenderNodes(render, temporaire2, couche - 1, 5, 0);
+        if ( cache[ couche - 1 ][ temporaire2 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire2 , render);
+            cache[ couche - 1 ][ temporaire2 ].indice_futur = tempo;
+        }
+        temporaire2 = cache[ couche - 1][ temporaire2 ].indice_futur;
+        RenderNodes(render, temporaire2, couche - 2, 25, 0);
+
+        unsigned long temporaire3 = cache[ couche ][ ind ].indice_ne;
+        RenderNodes(render, temporaire3, couche - 1, 10, 0);
+        if ( cache[ couche - 1 ][ temporaire3 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire3 , render);
+            cache[ couche - 1 ][ temporaire3 ].indice_futur = tempo;
+        }
+        temporaire3 = cache[ couche - 1][ temporaire3 ].indice_futur;
+        RenderNodes(render, temporaire3, couche - 2, 30, 0);
+
+        unsigned long temporaire4 = Joindre( couche - 1,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_no ].indice_so,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_no ].indice_se,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_so ].indice_no,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_so ].indice_ne , render);
+        RenderNodes(render, temporaire4, couche - 1, 0, 5);
+        if ( cache[ couche - 1 ][ temporaire4 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire4 , render);
+            cache[ couche - 1 ][ temporaire4 ].indice_futur = tempo;
+        }
+        temporaire4 = cache[ couche - 1][ temporaire4 ].indice_futur;
+        RenderNodes(render, temporaire4, couche - 2, 20, 5);
+
+        unsigned long temporaire5 = Joindre( couche - 1,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_no ].indice_se,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_ne ].indice_so,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_so ].indice_ne,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_se ].indice_no , render);
+        RenderNodes(render, temporaire5, couche - 1, 5, 5);
+        if ( cache[ couche - 1 ][ temporaire5 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire5 , render);
+            cache[ couche - 1 ][ temporaire5 ].indice_futur = tempo;
+        }
+        temporaire5 = cache[ couche - 1][ temporaire5 ].indice_futur;
+        RenderNodes(render, temporaire5, couche - 2, 25, 5);
+
+        unsigned long temporaire6 = Joindre( couche - 1,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_ne ].indice_so,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_ne ].indice_se,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_se ].indice_no,
+            cache[couche - 1][ cache[ couche ][ ind ].indice_se ].indice_ne , render);
+        RenderNodes(render, temporaire6, couche - 1, 10, 5);
+        if ( cache[ couche - 1 ][ temporaire6 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire6 , render);
+            cache[ couche - 1 ][ temporaire6 ].indice_futur = tempo;
+        }
+        temporaire6 = cache[ couche - 1][ temporaire6 ].indice_futur;
+        RenderNodes(render, temporaire6, couche - 2, 30, 5);
+
+        unsigned long temporaire7 = cache[ couche ][ ind ].indice_so;
+        RenderNodes(render, temporaire7, couche - 1, 0, 10);
+        if ( cache[ couche - 1][ temporaire7 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire7 , render);
+            cache[ couche - 1 ][ temporaire7 ].indice_futur = tempo;
+        }
+        temporaire7 = cache[ couche - 1][ temporaire7 ].indice_futur;
+        RenderNodes(render, temporaire7, couche - 2, 20, 10);
+
+        unsigned long temporaire8 = Joindre( couche - 1,
+            cache[couche - 1][cache[ couche ][ ind ].indice_so ].indice_ne,
+            cache[couche - 1][cache[ couche ][ ind ].indice_se ].indice_no,
+            cache[couche - 1][cache[ couche ][ ind ].indice_so ].indice_se,
+            cache[couche - 1][cache[ couche ][ ind ].indice_se ].indice_so , render);
+        RenderNodes(render, temporaire8, couche - 1, 5, 10);
+        if ( cache[ couche - 1][ temporaire8 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire8 , render);
+            cache[ couche - 1 ][ temporaire8 ].indice_futur = tempo;
+        }
+        temporaire8 = cache[ couche - 1][ temporaire8 ].indice_futur;
+        RenderNodes(render, temporaire8, couche - 2, 25, 10);
+
+        unsigned long temporaire9 = cache[ couche ][ ind ].indice_se;
+        RenderNodes(render, temporaire9, couche - 1, 10, 10);
+        if ( cache[ couche - 1][ temporaire9 ].indice_futur == 18446744073709551615ul ) {
+            tempo = CalculerSuccesseur( couche - 1, temporaire9 , render);
+            cache[ couche - 1 ][ temporaire9 ].indice_futur = tempo;
+        }
+        temporaire9 = cache[ couche - 1][ temporaire9].indice_futur;
+        RenderNodes(render, temporaire9, couche - 2, 30, 10);
+
+// ######################################################################################################
+// l'adresse du cache peut etre modifiée entre les appels
+        temporaire1 = Joindre( couche - 1 , temporaire1, temporaire2, temporaire4, temporaire5, render);
+        RenderNodes(render, temporaire1, couche - 1, 40, 0);
+        temporaire1 = CalculerSuccesseur( couche - 1 , temporaire1 , render);
+        RenderNodes(render, temporaire1, couche - 2, 40, 15);
+        temporaire3 = Joindre( couche - 1 , temporaire2, temporaire3, temporaire5, temporaire6, render);
+        RenderNodes(render, temporaire3, couche - 1, 45, 0);
+        temporaire3 = CalculerSuccesseur( couche - 1 , temporaire3 , render);
+        RenderNodes(render, temporaire3, couche - 2, 45, 15);
+        temporaire7 = Joindre( couche - 1 , temporaire4, temporaire5, temporaire7, temporaire8, render);
+        RenderNodes(render, temporaire7, couche - 1, 40, 5);
+        temporaire7 = CalculerSuccesseur( couche - 1 , temporaire7 , render);
+        RenderNodes(render, temporaire7, couche - 2, 40, 20);
+        temporaire9 = Joindre( couche - 1 , temporaire5, temporaire6, temporaire8, temporaire9, render);
+        RenderNodes(render, temporaire9, couche - 1, 45, 5);
+        temporaire9 = CalculerSuccesseur( couche - 1 , temporaire9 , render);
+        RenderNodes(render, temporaire9, couche - 2, 45, 20);
+        tempo = Joindre( couche - 1 , temporaire1, temporaire3, temporaire7, temporaire9 , render);
+        RenderNodes(render, tempo, couche - 1, 42, 60);
+        cache[couche][ind].indice_futur = tempo;
+// la double récursion permet d'avoir un successeur avancé 2**(k-2) générations dans le temps
+// pour profiter au maximum des règles du jeu: de l'espace entre 2**k -1 et 2**(k-1)
+        }
+    }
+    return cache[couche][ind].indice_futur;
+}
+
+int main() {
+
+//On crée les feuilles, dans le cache
+    cache = (Node**)malloc(sizeof(Node*));
+    cache[0] = (Node*)malloc(2 * sizeof(Node));
+//cellule unité morte
+    cache[0][0].couche = 0;
+//cellule unité vivante
+    cache[0][1].couche = 0;
+    dimensions_cache = (unsigned long long*)malloc(sizeof(unsigned long long));
+    dimensions_cache[0] = 2;
+    taille_cache = 0;
+// 0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0 Affichage 0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O0O
+if (SDL_Init(SDL_INIT_VIDEO) == -1) {//initialisation de SDL
+    SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+    exit(EXIT_FAILURE);
+}
+//on ouvre la fenetre
+SDL_Window* fenetre_affichage = SDL_CreateWindow("Idk", 1, 1, 1600, 800, SDL_WINDOW_SHOWN);
+SDL_Renderer* renderer = SDL_CreateRenderer(fenetre_affichage,-1,SDL_RENDERER_SOFTWARE);
+
+Node test;
+test.couche = 1;
+test.indice_futur = -1;
+test.indice_no = 1;
+test.indice_ne = 0;
+test.indice_so = 0;
+test.indice_se = 0;
+unsigned long testest = VerifierCache(test);
+Node test2;
+test2.couche = 1;
+test2.indice_futur = -1;
+test2.indice_no = 1;
+test2.indice_ne = 1;
+test2.indice_so = 1;
+test2.indice_se = 1;
+unsigned long testest2 = VerifierCache(test2);
+unsigned long t1 = Joindre( 2, 0, 0, 0, testest2, renderer);
+unsigned long t2 = Joindre( 2, 0, 0, testest, 0, renderer);
+unsigned long T = Joindre(3, t1, t2, 0, 0, renderer);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer);
+    RenderNodes(renderer, T, 3, 80, 0);
+
+RenderNodes( renderer, CalculerSuccesseur( 3, T, renderer ), 2, 80, 20);
+SDL_Delay(8000);
+    for (i=3 ; i < taille_cache ; i++) {
+        free(cache[i]);
+    }
+    free(dimensions_cache);
+    free(cache);
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(fenetre_affichage);
+    SDL_Quit();
+}
+

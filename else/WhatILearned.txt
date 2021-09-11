@@ -1,0 +1,20 @@
+Avec un cache qui peut etre actualisé, il faut faire attention à ce que :  lorsqu'on assigne le résultat d'une fonction à un emplacement du cache, celui-ci n'ait pas été modifié par la-dite fonction
+
+unsigned long long GetTheHash( Node truc ) {
+    return( ( truc.couche + 2 
+    + 5131830419411 * (cache[truc.couche - 1][truc.indice_no]).hash 
+    + 3758991985019 * (cache[truc.couche - 1][truc.indice_ne]).hash 
+    + 8973110871315 * (cache[truc.couche - 1][truc.indice_se]).hash 
+    + 4318490180473 *  (cache[truc.couche - 1][truc.indice_so]).hash )
+    & ( ( (unsigned long long)1 << 63) - 1 )   );
+}
+Ne fonctionne pas pour
+1 0 1 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
+et
+1 1 0 0
+0 0 0 0
+0 0 0 0
+0 0 0 0
